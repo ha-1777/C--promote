@@ -1,1 +1,1 @@
-# C-promote
+# C++-promote
