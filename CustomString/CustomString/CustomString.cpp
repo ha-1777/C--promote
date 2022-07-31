@@ -9,7 +9,7 @@ CustomString::CustomString(const char* str)
 	{
 		return;
 	}
-	m_length = strlen(str);
+	this->m_length = strlen(str);
 	m_data = new char[m_length + 1];
 	memcpy(m_data, str, m_length * sizeof(char));
 	m_data[m_length] = '\0';
@@ -93,12 +93,12 @@ CustomString CustomString::sub(int start, int end)
 	}
 	
 	int subLen = end - start + 1;
-	char* tempStr = new char[subLen];
-	//memset(tempStr, '\0', subLen*sizeof(char));
-	//memcpy(tempStr, m_data + sizeof(char) * start, subLen);
-	//CustomString str(tempStr);
+	char* tempStr = new char[subLen + 1];
+	//不对结尾进行赋值\0会导致char*长度出问题
+	tempStr[subLen] = '\0';
+	memcpy(tempStr, m_data + sizeof(char) * start, subLen);
+	CustomString str(tempStr);
 
 	delete[] tempStr;
-
 	return str;
 }
