@@ -39,6 +39,7 @@ CustomString::CustomString(CustomString&& obj) noexcept
 	delete[] m_data;
 	//exchange将obj.m_data值move到m_data，让后让obj.m_data指向nullptr
 	m_data = std::exchange(obj.m_data, nullptr);
+	m_length = obj.m_length;
 }
 
 CustomString& CustomString::operator=(const CustomString& obj)
@@ -100,5 +101,23 @@ CustomString CustomString::sub(int start, int end)
 	CustomString str(tempStr);
 
 	delete[] tempStr;
-	return str;
+	return str;	//return会走移动构造，没有移动构造则会走拷贝构造
+}
+
+void CustomString::append(const char* str)
+{
+	if (!str || "" == str)
+	{
+		return;
+	}
+
+	int newStrLen = m_length + strlen(str);
+	char* newStr = new char[newStrLen + 1];
+	
+	memcpy(newStr, m_data, m_length * sizeof(char));
+	memcpy(newStr + m_length * sizeof(char), str, strlen(str));
+	newStr[newStrLen] = '\0';
+	delete[] m_data;
+	std::exchange(m_data, newStr);
+	m_length = newStrLen;
 }

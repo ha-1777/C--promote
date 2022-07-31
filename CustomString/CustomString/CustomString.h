@@ -13,6 +13,7 @@ public:
 public:
 	int len();
 	CustomString sub(int start, int end);
+	void append(const char * str);
 private:
 	char* m_data;
 	int m_length;
