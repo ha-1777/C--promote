@@ -4,7 +4,7 @@
 
 CustomString::CustomString(const char* str)
 {
-	std::cout <<"constructor" << std::endl;
+	//std::cout <<"constructor" << std::endl;
 	if (!str)
 	{
 		return;
@@ -22,7 +22,7 @@ CustomString::CustomString(const CustomString& obj)
 		return;
 	}
 
-	std::cout << "copy constructor" << std::endl;
+	//std::cout << "copy constructor" << std::endl;
 	m_length = obj.m_length;
 	m_data = new char[m_length + 1];
 	memcpy(m_data, obj.m_data, m_length * sizeof(char));
@@ -60,13 +60,31 @@ CustomString& CustomString::operator=(const CustomString& obj)
 	return *this;
 }
 
+bool CustomString::operator==(const CustomString& obj)
+{
+	//可以先判断长度是否相等
+	if (m_length != obj.m_length)
+	{
+		return false;
+	}
+
+	for (int i=0; i<m_length; i++)
+	{
+		if (m_data[i] != obj.m_data[i])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 CustomString::~CustomString()
 {
 	if (!m_data)
 	{
 		return;
 	}
-	std::cout << "destructor" << std::endl;
+	//std::cout << "destructor" << std::endl;
 	delete[] m_data;
 }
 
@@ -120,4 +138,9 @@ void CustomString::append(const char* str)
 	delete[] m_data;
 	std::exchange(m_data, newStr);
 	m_length = newStrLen;
+}
+
+int CustomString::find(const char* str)
+{
+	return 0;
 }
