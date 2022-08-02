@@ -13,6 +13,7 @@ public:
 	CustomString sub(int start, int end);
 	void append(const char * str);
 	int find(const char * str);
+	CustomString* split(const char* str);
 private:
 	char* m_data;
 	int m_length;

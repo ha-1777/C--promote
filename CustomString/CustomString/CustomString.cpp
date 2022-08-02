@@ -1,6 +1,7 @@
 #include "CustomString.h"
 #include <string.h>
 #include <iostream>
+#include <vector>
 
 CustomString::CustomString(const char* str)
 {
@@ -36,7 +37,6 @@ CustomString::CustomString(CustomString&& obj) noexcept
 		return;
 	}
 
-	delete[] m_data;
 	//exchange将obj.m_data值move到m_data，让后让obj.m_data指向nullptr
 	m_data = std::exchange(obj.m_data, nullptr);
 	m_length = obj.m_length;
@@ -140,7 +140,117 @@ void CustomString::append(const char* str)
 	m_length = newStrLen;
 }
 
+int* makeNext(const char* str)
+{
+	int len = strlen(str);
+	int* next = new int[len];
+	next[0] = 0; //初始化next，next[0]不使用
+	int i = 1; //str索引
+	int j = 0; //最长公共前后缀
+
+	while (i < len)
+	{
+		if (str[i] == str[j])
+		{
+			//如果相等，则最长公共前后缀+1
+			j++;
+			next[i] = j;
+			i++;
+		}
+		else
+		{
+			if (j != 0)
+			{
+				j = next[j - 1];//通过上一个next求这个next
+			}
+			else
+			{
+				next[i] = 0;
+				i++;
+			}
+		}
+	}
+	return next;
+}
+
+//使用pat去匹配txt
+int KMP(const char* pat, const char* txt, int startIndex = 0)
+{
+	int M = strlen(pat);
+	int N = strlen(txt);
+
+	int i = startIndex, j = 0;
+	int* next = makeNext(txt);
+
+	while ((N - i) >= (M - j))
+	{
+		if (pat[j] == txt[i])
+		{
+			i++;
+			j++;
+		}
+
+		if (j == M)
+		{
+			return i - j;
+		}
+		else if (i < N && pat[j] != txt[i])
+		{
+			if (j != 0)
+			{
+				j = next[j - 1];
+			}
+			else
+			{
+				i = i + 1;
+			}
+
+		}
+	}
+	return -1;
+	delete[] next;
+}
+
+
+
 int CustomString::find(const char* str)
 {
-	return 0;
+	return KMP(str, m_data);
 }
+
+CustomString* CustomString::split(const char* str)
+{
+	int str_length = strlen(str);
+
+	if (str_length > m_length)
+	{
+		return nullptr;
+	}
+
+	int startIndex = 0;
+	std::vector<CustomString> vec;
+
+	for (int i=0; i< m_length;i++)
+	{
+		int index = KMP(str, m_data, startIndex);
+
+		if (index == -1)
+		{
+			CustomString tempStr = sub(startIndex, m_length-1);
+			vec.push_back(tempStr);
+			break;
+		}
+
+		CustomString tempStr = sub(startIndex, index-1);
+		vec.push_back(tempStr);
+		startIndex = index + 1;
+	}
+	CustomString* result = new CustomString[vec.size()]();
+	for (int i = 0; i < vec.size(); i++)
+	{
+		result[i] = vec[i];
+	}
+
+	return result;
+}
+
