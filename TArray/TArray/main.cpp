@@ -4,16 +4,16 @@
 int main()
 {
 	TArray arr = TArray();
-	// arr.reserve(2);
+	 arr.reserve(2);
 	arr.push(1);
 	arr.push(2);
 	arr.push(3);
 	arr.push(4);
-	//arr.insert(1, 3);
-	//arr.remove(1);
-	//arr.pop();
-	//arr.clear();
-	//int index = arr.findIndex(1);
+	arr.insert(1, 3);
+	arr.remove(1);
+	arr.pop();
+	arr.clear();
+	int index = arr.findIndex(3);
 
 	//实现双向链表以下api
 	//auto list1 = new CustomList();
