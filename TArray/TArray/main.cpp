@@ -19,11 +19,15 @@ int main()
 	//实现双向链表以下api
 	auto list1 = new TList<int>();
 	auto node1 = list1->push(1);
-	//auto node2 = list1.push(2);
-	//auto node3 = list1.insert(node2, 3);
-	//auto ret = list1.find(2);
-	//list1.remove(node2);
-	//list1.popAll();
+	list1->push(2);
+	list1->push(3);
+
+	auto node3 = list1->insert(3, 6);
+	auto ret = list1->find(6);
+	list1->remove(3);
+	list1->popAll();
+
+	delete list1;
 
 	return 0;
  }
