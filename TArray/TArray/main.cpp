@@ -1,10 +1,10 @@
 #include <iostream>
-#include "TArray.h"
-#include "TList.h"
+#include "TArray.hpp"
+#include "TList.hpp"
 
 int main()
 {
-	TArray arr = TArray();
+	TArray<int> arr = TArray<int>();
 	 arr.reserve(2);
 	arr.push(1);
 	arr.push(2);
